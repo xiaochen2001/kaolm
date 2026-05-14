@@ -2,186 +2,39 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>校门口烤冷面·扫码点餐</title>
+    <title>芝士火鸡烤冷面·扫码点餐</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
-        }
-        body {
-            background-color: #fff8f5;
-            padding: 15px;
-            padding-bottom: 180px;
-        }
-        .header {
-            text-align: center;
-            color: #e63946;
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            padding: 10px 0;
-            border-bottom: 2px solid #e63946;
-        }
-        .section-title {
-            color: #d62828;
-            font-size: 18px;
-            font-weight: bold;
-            margin: 20px 0 10px;
-        }
-        .menu-item {
-            background: #fff;
-            border-radius: 12px;
-            padding: 12px 15px;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-        .item-info .name {
-            font-size: 16px;
-            font-weight: 600;
-            color: #2b2d42;
-        }
-        .item-info .desc {
-            font-size: 12px;
-            color: #8d99ae;
-            margin-top: 3px;
-        }
-        .item-info .price {
-            color: #e63946;
-            font-size: 16px;
-            font-weight: bold;
-            margin-top: 5px;
-        }
-        .count-control {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .count-btn {
-            background-color: #e63946;
-            color: #fff;
-            border: none;
-            border-radius: 6px;
-            width: 28px;
-            height: 28px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        .count-btn:active {
-            background-color: #d62828;
-        }
-        .count-text {
-            font-size: 16px;
-            min-width: 24px;
-            text-align: center;
-        }
-        .remark-box {
-            margin: 20px 0;
-        }
-        .remark-box textarea {
-            width: 100%;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            padding: 12px;
-            font-size: 14px;
-            min-height: 80px;
-            resize: none;
-        }
-        .order-list {
-            background: #fff;
-            border-radius: 10px;
-            padding: 15px;
-            margin: 15px 0;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-        }
-        .order-list h4 {
-            color: #d62828;
-            margin-bottom: 10px;
-            font-size: 16px;
-        }
-        .order-item {
-            font-size: 14px;
-            color: #333;
-            line-height: 1.6;
-        }
-        .total-bar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: #fff;
-            padding: 15px 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-        }
-        .total-text {
-            font-size: 18px;
-            font-weight: bold;
-            color: #2b2d42;
-        }
-        .pay-btn {
-            background-color: #07c160;
-            color: #fff;
-            border: none;
-            border-radius: 10px;
-            padding: 10px 20px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-        .qrcode-box {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.85);
-            z-index: 999;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            padding: 20px;
-        }
-        .qrcode-box img {
-            width: 220px;
-            border-radius: 10px;
-            margin: 10px 0;
-        }
-        .close-btn {
-            background-color: #fff;
-            color: #333;
-            border: none;
-            border-radius: 8px;
-            padding: 8px 20px;
-            font-size: 14px;
-            margin-top: 15px;
-            cursor: pointer;
-        }
-        .pay-row {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin: 15px 0;
-        }
-        .pay-col {
-            text-align: center;
-        }
+        * {margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft YaHei",sans-serif;}
+        body {background:#fff8f5;padding:15px;padding-bottom:180px;}
+        .header {text-align:center;color:#e63946;font-size:24px;font-weight:bold;margin-bottom:20px;padding:10px 0;border-bottom:2px solid #e63946;}
+        .section-title {color:#d62828;font-size:18px;font-weight:bold;margin:20px 0 10px;}
+        .menu-item {background:#fff;border-radius:12px;padding:12px 15px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 5px rgba(0,0,0,0.05);}
+        .item-info .name {font-size:16px;font-weight:600;color:#2b2d42;}
+        .item-info .desc {font-size:12px;color:#8d99ae;margin-top:3px;}
+        .item-info .price {color:#e63946;font-size:16px;font-weight:bold;margin-top:5px;}
+        .count-control {display:flex;align-items:center;gap:8px;}
+        .count-btn {background:#e63946;color:#fff;border:none;border-radius:6px;width:28px;height:28px;font-size:16px;cursor:pointer;}
+        .count-btn:active {background:#d62828;}
+        .count-text {font-size:16px;min-width:24px;text-align:center;}
+        .remark-box {margin:20px 0;}
+        .remark-box textarea {width:100%;border:1px solid #ddd;border-radius:10px;padding:12px;font-size:14px;min-height:80px;resize:none;}
+        .order-list {background:#fff;border-radius:10px;padding:15px;margin:15px 0;box-shadow:0 2px 5px rgba(0,0,0,0.05);}
+        .order-list h4 {color:#d62828;margin-bottom:10px;font-size:16px;}
+        .order-item {font-size:14px;color:#333;line-height:1.6;}
+        .total-bar {position:fixed;bottom:0;left:0;width:100%;background:#fff;padding:15px 20px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 -2px 10px rgba(0,0,0,0.1);}
+        .total-text {font-size:18px;font-weight:bold;color:#2b2d42;}
+        .pay-btn {background:#07c160;color:#fff;border:none;border-radius:10px;padding:10px 20px;font-size:16px;font-weight:bold;cursor:pointer;}
+        .qrcode-box {display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.85);z-index:999;flex-direction:column;align-items:center;justify-content:center;color:#fff;padding:20px;}
+        .qrcode-box img {width:220px;border-radius:10px;margin:10px 0;}
+        .close-btn {background:#fff;color:#333;border:none;border-radius:8px;padding:8px 20px;font-size:14px;margin-top:15px;cursor:pointer;}
+        .pay-row {display:flex;gap:20px;flex-wrap:wrap;justify-content:center;margin:15px 0;}
+        .pay-col {text-align:center;}
     </style>
 </head>
 <body>
-    <div class="header">🔥校门口烤冷面·扫码点餐</div>
+    <div class="header">🔥芝士火鸡烤冷面·扫码点餐</div>
 
-    <!-- 经典套餐 -->
     <div class="section-title">经典套餐</div>
     <div class="menu-item">
         <div class="item-info">
@@ -208,7 +61,6 @@
         </div>
     </div>
 
-    <!-- 特色风味 -->
     <div class="section-title">特色风味</div>
     <div class="menu-item">
         <div class="item-info">
@@ -235,7 +87,6 @@
         </div>
     </div>
 
-    <!-- 芝士爆款 -->
     <div class="section-title">芝士爆款</div>
     <div class="menu-item">
         <div class="item-info">
@@ -262,7 +113,6 @@
         </div>
     </div>
 
-    <!-- 网红爆款 -->
     <div class="section-title">网红爆款</div>
     <div class="menu-item">
         <div class="item-info">
@@ -289,7 +139,6 @@
         </div>
     </div>
 
-    <!-- 火鸡面拌面系列 -->
     <div class="section-title">火鸡面拌面系列</div>
     <div class="menu-item">
         <div class="item-info">
@@ -314,7 +163,6 @@
         </div>
     </div>
 
-    <!-- 加料区 -->
     <div class="section-title">加料区</div>
     <div class="menu-item">
         <div class="item-info">
@@ -419,7 +267,6 @@
         <button class="pay-btn" onclick="submitOrder()">提交订单并付款</button>
     </div>
 
-    <!-- 付款弹窗 -->
     <div class="qrcode-box" id="payQrcode">
         <h3>请选择支付方式</h3>
         <div class="pay-row">
@@ -437,13 +284,9 @@
     </div>
 
 <script>
-// 你的企业微信机器人Webhook，已自动填入
-const WEBHOOK_URL = "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=905d6e90-9d6a-4b24-981b-1627eec79b9c";
-
 let cart = {};
 let total = 0;
 
-// 增减数量，限制不能小于0，防止恶意刷量
 function changeCount(name, price, step){
     if(!cart[name]) cart[name] = {count:0, price:price};
     cart[name].count += step;
@@ -452,7 +295,6 @@ function changeCount(name, price, step){
     renderOrder();
 }
 
-// 计算总价（前端显示，真实金额由后台订单为准）
 function calcTotal(){
     total = 0;
     for(let k in cart){
@@ -461,20 +303,23 @@ function calcTotal(){
     document.getElementById("totalPrice").innerText = total;
 }
 
-// 渲染订单清单
 function renderOrder(){
     let html = "";
     for(let k in cart){
         if(cart[k].count > 0){
-            html += k + " ×" + cart[k].count 
-                    + "  " + cart[k].count*cart[k].price + "元<br>";
+            html += k + " ×" + cart[k].count + "  " + cart[k].count*cart[k].price + "元<br>";
         }
     }
-    if(html === "") html = "暂未点餐";
-    document.getElementById("orderListBox").innerHTML = html;
+    document.getElementById("orderListBox").innerHTML = html || "暂未点餐";
 }
 
-// 提交订单 → 发送到企业微信群
+// 保存订单到本地存储
+function saveOrder(orderData){
+    let orders = JSON.parse(localStorage.getItem("shopOrders") || "[]");
+    orders.unshift(orderData);
+    localStorage.setItem("shopOrders", JSON.stringify(orders));
+}
+
 function submitOrder(){
     if(total <= 0){
         alert("请先选择菜品！");
@@ -482,33 +327,32 @@ function submitOrder(){
     }
     let remark = document.getElementById("remark").value.trim();
     let time = new Date().toLocaleString();
+    let orderNo = Date.now();
 
-    let content = "🍜 新订单通知\n";
-    content += "下单时间：" + time + "\n\n";
-
+    let orderGoods = "";
     for(let k in cart){
         if(cart[k].count > 0){
-            content += k + " ×" + cart[k].count 
-                    + "  " + cart[k].count*cart[k].price + "元\n";
+            orderGoods += k + " ×" + cart[k].count + " " + cart[k].count*cart[k].price + "元\n";
         }
     }
-    content += "\n合计金额：" + total + "元\n";
-    content += "顾客备注：" + (remark || "无");
 
-    // 发送订单到企业微信
-    fetch(WEBHOOK_URL, {
-        method:"POST",
-        headers:{"Content-Type":"application/json"},
-        body:JSON.stringify({
-            msgtype:"text",
-            text:{content:content}
-        })
-    }).then(()=>{
-        // 订单提交成功，弹出付款码
-        document.getElementById("payQrcode").style.display = "flex";
-    }).catch(()=>{
-        alert("订单提交失败，请稍后重试");
-    });
+    let orderData = {
+        id: orderNo,
+        time: time,
+        goods: orderGoods,
+        total: total,
+        remark: remark || "无",
+        status: "待出餐"
+    };
+
+    saveOrder(orderData);
+    document.getElementById("payQrcode").style.display = "flex";
+    // 清空购物车
+    cart = {};
+    total = 0;
+    calcTotal();
+    renderOrder();
+    document.getElementById("remark").value = "";
 }
 
 function hidePay(){
