@@ -287,10 +287,34 @@
 let cart = {};
 let total = 0;
 
+// 菜品和数量ID的对应关系
+const idMap = {
+    "标准烤冷面": "c1",
+    "大份烤冷面": "c2",
+    "辣白菜烤冷面": "c3",
+    "里脊烤冷面": "c4",
+    "芝士玉米烤冷面": "c5",
+    "芝士鸡排烤冷面": "c6",
+    "三养火鸡面烤冷面": "c7",
+    "芝士三养火鸡面烤冷面": "c8",
+    "三养瀑布土豆泥拌面": "c9",
+    "三养芝士瀑布土豆泥拌面": "c10",
+    "加料-鸡蛋": "c11",
+    "加料-面皮": "c12",
+    "加料-烤肠": "c13",
+    "加料-辣白菜": "c14",
+    "加料-里脊": "c15",
+    "加料-鸡排": "c16",
+    "加料-芝士": "c17",
+    "加料-火鸡面": "c18"
+};
+
 function changeCount(name, price, step){
     if(!cart[name]) cart[name] = {count:0, price:price};
     cart[name].count += step;
     if(cart[name].count < 0) cart[name].count = 0;
+    // 更新页面上的数字
+    document.getElementById(idMap[name]).innerText = cart[name].count;
     calcTotal();
     renderOrder();
 }
@@ -350,6 +374,10 @@ function submitOrder(){
     // 清空购物车
     cart = {};
     total = 0;
+    // 重置所有数量显示
+    for(let k in idMap){
+        document.getElementById(idMap[k]).innerText = 0;
+    }
     calcTotal();
     renderOrder();
     document.getElementById("remark").value = "";
