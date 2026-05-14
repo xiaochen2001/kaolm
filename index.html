@@ -272,11 +272,11 @@
         <div class="pay-row">
             <div class="pay-col">
                 <p>微信扫码付款</p>
-                <img src="https://i.imgur.com/1aX2QH0.png" alt="微信收款码">
+                <img src="wechat.jpg" alt="微信收款码">
             </div>
             <div class="pay-col">
                 <p>支付宝扫码付款</p>
-                <img src="https://i.imgur.com/2bY3K9L.png" alt="支付宝收款码">
+                <img src="alipay.jpg" alt="支付宝收款码">
             </div>
         </div>
         <p>付款后请凭付款记录取餐</p>
@@ -313,7 +313,6 @@ function changeCount(name, price, step){
     if(!cart[name]) cart[name] = {count:0, price:price};
     cart[name].count += step;
     if(cart[name].count < 0) cart[name].count = 0;
-    // 更新页面上的数字
     document.getElementById(idMap[name]).innerText = cart[name].count;
     calcTotal();
     renderOrder();
