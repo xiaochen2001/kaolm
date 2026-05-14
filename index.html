@@ -57,17 +57,28 @@
             font-weight: bold;
             margin-top: 5px;
         }
-        .add-btn {
+        .count-control {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .count-btn {
             background-color: #e63946;
             color: #fff;
             border: none;
-            border-radius: 8px;
-            padding: 8px 15px;
-            font-size: 14px;
+            border-radius: 6px;
+            width: 28px;
+            height: 28px;
+            font-size: 16px;
             cursor: pointer;
         }
-        .add-btn:active {
+        .count-btn:active {
             background-color: #d62828;
+        }
+        .count-text {
+            font-size: 16px;
+            min-width: 24px;
+            text-align: center;
         }
         .remark-box {
             margin: 20px 0;
@@ -110,17 +121,17 @@
             align-items: center;
             box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
         }
-        .total-bar .total-text {
+        .total-text {
             font-size: 18px;
             font-weight: bold;
             color: #2b2d42;
         }
-        .total-bar .pay-btn {
+        .pay-btn {
             background-color: #07c160;
             color: #fff;
             border: none;
             border-radius: 10px;
-            padding: 10px 25px;
+            padding: 10px 20px;
             font-size: 16px;
             font-weight: bold;
             cursor: pointer;
@@ -153,6 +164,7 @@
             padding: 8px 20px;
             font-size: 14px;
             margin-top: 15px;
+            cursor: pointer;
         }
         .pay-row {
             display: flex;
@@ -177,7 +189,11 @@
             <div class="desc">鸡蛋+烤肠+面皮+新鲜蔬菜</div>
             <div class="price">9元</div>
         </div>
-        <button class="add-btn" onclick="addGoods('标准烤冷面',9)">+ 点一份</button>
+        <div class="count-control">
+            <button class="count-btn" onclick="changeCount('标准烤冷面',9,-1)">-</button>
+            <span class="count-text" id="c1">0</span>
+            <button class="count-btn" onclick="changeCount('标准烤冷面',9,1)">+</button>
+        </div>
     </div>
     <div class="menu-item">
         <div class="item-info">
@@ -185,7 +201,11 @@
             <div class="desc">鸡蛋+烤肠+双面皮+新鲜蔬菜</div>
             <div class="price">11元</div>
         </div>
-        <button class="add-btn" onclick="addGoods('大份烤冷面',11)">+ 点一份</button>
+        <div class="count-control">
+            <button class="count-btn" onclick="changeCount('大份烤冷面',11,-1)">-</button>
+            <span class="count-text" id="c2">0</span>
+            <button class="count-btn" onclick="changeCount('大份烤冷面',11,1)">+</button>
+        </div>
     </div>
 
     <!-- 特色风味 -->
@@ -196,7 +216,11 @@
             <div class="desc">鸡蛋+烤肠+面皮+新鲜蔬菜+辣白菜</div>
             <div class="price">11元</div>
         </div>
-        <button class="add-btn" onclick="addGoods('辣白菜烤冷面',11)">+ 点一份</button>
+        <div class="count-control">
+            <button class="count-btn" onclick="changeCount('辣白菜烤冷面',11,-1)">-</button>
+            <span class="count-text" id="c3">0</span>
+            <button class="count-btn" onclick="changeCount('辣白菜烤冷面',11,1)">+</button>
+        </div>
     </div>
     <div class="menu-item">
         <div class="item-info">
@@ -204,7 +228,11 @@
             <div class="desc">鸡蛋+烤肠+面皮+新鲜蔬菜+里脊</div>
             <div class="price">12元</div>
         </div>
-        <button class="add-btn" onclick="addGoods('里脊烤冷面',12)">+ 点一份</button>
+        <div class="count-control">
+            <button class="count-btn" onclick="changeCount('里脊烤冷面',12,-1)">-</button>
+            <span class="count-text" id="c4">0</span>
+            <button class="count-btn" onclick="changeCount('里脊烤冷面',12,1)">+</button>
+        </div>
     </div>
 
     <!-- 芝士爆款 -->
@@ -215,7 +243,11 @@
             <div class="desc">鸡蛋+玉米+芝士+面皮+新鲜蔬菜</div>
             <div class="price">13元</div>
         </div>
-        <button class="add-btn" onclick="addGoods('芝士玉米烤冷面',13)">+ 点一份</button>
+        <div class="count-control">
+            <button class="count-btn" onclick="changeCount('芝士玉米烤冷面',13,-1)">-</button>
+            <span class="count-text" id="c5">0</span>
+            <button class="count-btn" onclick="changeCount('芝士玉米烤冷面',13,1)">+</button>
+        </div>
     </div>
     <div class="menu-item">
         <div class="item-info">
@@ -223,7 +255,11 @@
             <div class="desc">鸡蛋+芝士+鸡排+面皮+新鲜蔬菜</div>
             <div class="price">15元</div>
         </div>
-        <button class="add-btn" onclick="addGoods('芝士鸡排烤冷面',15)">+ 点一份</button>
+        <div class="count-control">
+            <button class="count-btn" onclick="changeCount('芝士鸡排烤冷面',15,-1)">-</button>
+            <span class="count-text" id="c6">0</span>
+            <button class="count-btn" onclick="changeCount('芝士鸡排烤冷面',15,1)">+</button>
+        </div>
     </div>
 
     <!-- 网红爆款 -->
@@ -234,7 +270,11 @@
             <div class="desc">鸡蛋+火鸡面+烤肠+面皮+新鲜蔬菜</div>
             <div class="price">14元</div>
         </div>
-        <button class="add-btn" onclick="addGoods('三养火鸡面烤冷面',14)">+ 点一份</button>
+        <div class="count-control">
+            <button class="count-btn" onclick="changeCount('三养火鸡面烤冷面',14,-1)">-</button>
+            <span class="count-text" id="c7">0</span>
+            <button class="count-btn" onclick="changeCount('三养火鸡面烤冷面',14,1)">+</button>
+        </div>
     </div>
     <div class="menu-item">
         <div class="item-info">
@@ -242,7 +282,11 @@
             <div class="desc">鸡蛋+火鸡面+烤肠+面皮+新鲜蔬菜+芝士</div>
             <div class="price">18元</div>
         </div>
-        <button class="add-btn" onclick="addGoods('芝士三养火鸡面烤冷面',18)">+ 点一份</button>
+        <div class="count-control">
+            <button class="count-btn" onclick="changeCount('芝士三养火鸡面烤冷面',18,-1)">-</button>
+            <span class="count-text" id="c8">0</span>
+            <button class="count-btn" onclick="changeCount('芝士三养火鸡面烤冷面',18,1)">+</button>
+        </div>
     </div>
 
     <!-- 火鸡面拌面系列 -->
@@ -252,14 +296,22 @@
             <div class="name">三养瀑布土豆泥拌面</div>
             <div class="price">14元</div>
         </div>
-        <button class="add-btn" onclick="addGoods('三养瀑布土豆泥拌面',14)">+ 点一份</button>
+        <div class="count-control">
+            <button class="count-btn" onclick="changeCount('三养瀑布土豆泥拌面',14,-1)">-</button>
+            <span class="count-text" id="c9">0</span>
+            <button class="count-btn" onclick="changeCount('三养瀑布土豆泥拌面',14,1)">+</button>
+        </div>
     </div>
     <div class="menu-item">
         <div class="item-info">
             <div class="name">三养芝士瀑布土豆泥拌面</div>
             <div class="price">18元</div>
         </div>
-        <button class="add-btn" onclick="addGoods('三养芝士瀑布土豆泥拌面',18)">+ 点一份</button>
+        <div class="count-control">
+            <button class="count-btn" onclick="changeCount('三养芝士瀑布土豆泥拌面',18,-1)">-</button>
+            <span class="count-text" id="c10">0</span>
+            <button class="count-btn" onclick="changeCount('三养芝士瀑布土豆泥拌面',18,1)">+</button>
+        </div>
     </div>
 
     <!-- 加料区 -->
@@ -269,129 +321,199 @@
             <div class="name">鸡蛋</div>
             <div class="price">2元</div>
         </div>
-        <button class="add-btn" onclick="addGoods('加料-鸡蛋',2)">+ 加一份</button>
+        <div class="count-control">
+            <button class="count-btn" onclick="changeCount('加料-鸡蛋',2,-1)">-</button>
+            <span class="count-text" id="c11">0</span>
+            <button class="count-btn" onclick="changeCount('加料-鸡蛋',2,1)">+</button>
+        </div>
     </div>
     <div class="menu-item">
         <div class="item-info">
             <div class="name">面皮</div>
             <div class="price">2元</div>
         </div>
-        <button class="add-btn" onclick="addGoods('加料-面皮',2)">+ 加一份</button>
+        <div class="count-control">
+            <button class="count-btn" onclick="changeCount('加料-面皮',2,-1)">-</button>
+            <span class="count-text" id="c12">0</span>
+            <button class="count-btn" onclick="changeCount('加料-面皮',2,1)">+</button>
+        </div>
     </div>
     <div class="menu-item">
         <div class="item-info">
             <div class="name">烤肠</div>
             <div class="price">2元</div>
         </div>
-        <button class="add-btn" onclick="addGoods('加料-烤肠',2)">+ 加一份</button>
+        <div class="count-control">
+            <button class="count-btn" onclick="changeCount('加料-烤肠',2,-1)">-</button>
+            <span class="count-text" id="c13">0</span>
+            <button class="count-btn" onclick="changeCount('加料-烤肠',2,1)">+</button>
+        </div>
     </div>
     <div class="menu-item">
         <div class="item-info">
             <div class="name">辣白菜</div>
             <div class="price">2元</div>
         </div>
-        <button class="add-btn" onclick="addGoods('加料-辣白菜',2)">+ 加一份</button>
+        <div class="count-control">
+            <button class="count-btn" onclick="changeCount('加料-辣白菜',2,-1)">-</button>
+            <span class="count-text" id="c14">0</span>
+            <button class="count-btn" onclick="changeCount('加料-辣白菜',2,1)">+</button>
+        </div>
     </div>
     <div class="menu-item">
         <div class="item-info">
             <div class="name">里脊</div>
             <div class="price">3元</div>
         </div>
-        <button class="add-btn" onclick="addGoods('加料-里脊',3)">+ 加一份</button>
+        <div class="count-control">
+            <button class="count-btn" onclick="changeCount('加料-里脊',3,-1)">-</button>
+            <span class="count-text" id="c15">0</span>
+            <button class="count-btn" onclick="changeCount('加料-里脊',3,1)">+</button>
+        </div>
     </div>
     <div class="menu-item">
         <div class="item-info">
             <div class="name">鸡排</div>
             <div class="price">4元</div>
         </div>
-        <button class="add-btn" onclick="addGoods('加料-鸡排',4)">+ 加一份</button>
+        <div class="count-control">
+            <button class="count-btn" onclick="changeCount('加料-鸡排',4,-1)">-</button>
+            <span class="count-text" id="c16">0</span>
+            <button class="count-btn" onclick="changeCount('加料-鸡排',4,1)">+</button>
+        </div>
     </div>
     <div class="menu-item">
         <div class="item-info">
             <div class="name">芝士</div>
             <div class="price">4元</div>
         </div>
-        <button class="add-btn" onclick="addGoods('加料-芝士',4)">+ 加一份</button>
+        <div class="count-control">
+            <button class="count-btn" onclick="changeCount('加料-芝士',4,-1)">-</button>
+            <span class="count-text" id="c17">0</span>
+            <button class="count-btn" onclick="changeCount('加料-芝士',4,1)">+</button>
+        </div>
     </div>
     <div class="menu-item">
         <div class="item-info">
             <div class="name">火鸡面</div>
             <div class="price">6元</div>
         </div>
-        <button class="add-btn" onclick="addGoods('加料-火鸡面',6)">+ 加一份</button>
+        <div class="count-control">
+            <button class="count-btn" onclick="changeCount('加料-火鸡面',6,-1)">-</button>
+            <span class="count-text" id="c18">0</span>
+            <button class="count-btn" onclick="changeCount('加料-火鸡面',6,1)">+</button>
+        </div>
     </div>
 
-    <!-- 已点订单清单 -->
+    <div class="remark-box">
+        <textarea id="remark" placeholder="备注：辣度、不要香菜、忌口等"></textarea>
+    </div>
+
     <div class="order-list">
         <h4>📋 已点清单</h4>
         <div id="orderListBox" class="order-item">暂未点餐</div>
     </div>
 
-    <div class="remark-box">
-        <textarea placeholder="备注：辣度（微辣/中辣/特辣）、忌口（不要香菜/洋葱）等"></textarea>
-    </div>
-
     <div class="total-bar">
         <div class="total-text">合计：<span id="totalPrice">0</span> 元</div>
-        <button class="pay-btn" onclick="showPay()">去付款</button>
+        <button class="pay-btn" onclick="submitOrder()">提交订单并付款</button>
     </div>
 
-    <!-- 付款码弹窗（微信+支付宝） -->
+    <!-- 付款弹窗 -->
     <div class="qrcode-box" id="payQrcode">
         <h3>请选择支付方式</h3>
         <div class="pay-row">
             <div class="pay-col">
-                <p>微信扫码</p>
-                <img src=""C:\Users\wuzou\Desktop\微信图片_20260514142136_613_26.jpg"" alt="微信收款码">
+                <p>微信扫码付款</p>
+                <img src="https://p3-flow-image-sign.byteimg.com/tos-cn-i-a9rns2rl3d/2026-05-14/1749891981133913344.jpg~tplv-a9rns2rl3d-image.image" alt="微信收款码">
             </div>
             <div class="pay-col">
-                <p>支付宝扫码</p>
-                <img src=""C:\Users\wuzou\Desktop\微信图片_20260514143935_41_434.jpg"" alt="支付宝收款码">
+                <p>支付宝扫码付款</p>
+                <img src="https://p3-flow-image-sign.byteimg.com/tos-cn-i-a9rns2rl3d/2026-05-14/1749891981133913345.jpg~tplv-a9rns2rl3d-image.image" alt="支付宝收款码">
             </div>
         </div>
-        <p>付款后请告知老板订单备注，凭付款凭证取餐~</p>
-        <button class="close-btn" onclick="hidePay()">返回点餐</button>
+        <p>付款后请凭付款记录取餐</p>
+        <button class="close-btn" onclick="hidePay()">返回</button>
     </div>
 
-    <script>
-        let total = 0;
-        let orderMap = {};
+<script>
+// 你的企业微信机器人Webhook，已自动填入
+const WEBHOOK_URL = "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=905d6e90-9d6a-4b24-981b-1627eec79b9c";
 
-        function addGoods(name, price){
-            total += price;
-            if(orderMap[name]){
-                orderMap[name].count += 1;
-            }else{
-                orderMap[name] = {price:price, count:1};
-            }
-            document.getElementById("totalPrice").innerText = total;
-            renderOrderList();
-        }
+let cart = {};
+let total = 0;
 
-        function renderOrderList(){
-            let html = "";
-            let keys = Object.keys(orderMap);
-            if(keys.length === 0){
-                html = "暂未点餐";
-            }else{
-                keys.forEach(k=>{
-                    html += k + " ×" + orderMap[k].count 
-                             + "  " + orderMap[k].price*orderMap[k].count + "元<br>";
-                });
-            }
-            document.getElementById("orderListBox").innerHTML = html;
-        }
+// 增减数量，限制不能小于0，防止恶意刷量
+function changeCount(name, price, step){
+    if(!cart[name]) cart[name] = {count:0, price:price};
+    cart[name].count += step;
+    if(cart[name].count < 0) cart[name].count = 0;
+    calcTotal();
+    renderOrder();
+}
 
-        function showPay(){
-            if(total <= 0){
-                alert("请先点选菜品或加料哦~");
-                return;
-            }
-            document.getElementById("payQrcode").style.display = "flex";
+// 计算总价（前端显示，真实金额由后台订单为准）
+function calcTotal(){
+    total = 0;
+    for(let k in cart){
+        total += cart[k].count * cart[k].price;
+    }
+    document.getElementById("totalPrice").innerText = total;
+}
+
+// 渲染订单清单
+function renderOrder(){
+    let html = "";
+    for(let k in cart){
+        if(cart[k].count > 0){
+            html += k + " ×" + cart[k].count 
+                    + "  " + cart[k].count*cart[k].price + "元<br>";
         }
-        function hidePay(){
-            document.getElementById("payQrcode").style.display = "none";
+    }
+    if(html === "") html = "暂未点餐";
+    document.getElementById("orderListBox").innerHTML = html;
+}
+
+// 提交订单 → 发送到企业微信群
+function submitOrder(){
+    if(total <= 0){
+        alert("请先选择菜品！");
+        return;
+    }
+    let remark = document.getElementById("remark").value.trim();
+    let time = new Date().toLocaleString();
+
+    let content = "🍜 新订单通知\n";
+    content += "下单时间：" + time + "\n\n";
+
+    for(let k in cart){
+        if(cart[k].count > 0){
+            content += k + " ×" + cart[k].count 
+                    + "  " + cart[k].count*cart[k].price + "元\n";
         }
-    </script>
+    }
+    content += "\n合计金额：" + total + "元\n";
+    content += "顾客备注：" + (remark || "无");
+
+    // 发送订单到企业微信
+    fetch(WEBHOOK_URL, {
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({
+            msgtype:"text",
+            text:{content:content}
+        })
+    }).then(()=>{
+        // 订单提交成功，弹出付款码
+        document.getElementById("payQrcode").style.display = "flex";
+    }).catch(()=>{
+        alert("订单提交失败，请稍后重试");
+    });
+}
+
+function hidePay(){
+    document.getElementById("payQrcode").style.display = "none";
+}
+</script>
 </body>
 </html>
