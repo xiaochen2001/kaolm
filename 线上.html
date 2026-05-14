@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>校门口烤冷面·扫码点餐</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+        }
+        body {
+            background-color: #fff8f5;
+            padding: 15px;
+            padding-bottom: 180px;
+        }
+        .header {
+            text-align: center;
+            color: #e63946;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            padding: 10px 0;
+            border-bottom: 2px solid #e63946;
+        }
+        .section-title {
+            color: #d62828;
+            font-size: 18px;
+            font-weight: bold;
+            margin: 20px 0 10px;
+        }
+        .menu-item {
+            background: #fff;
+            border-radius: 12px;
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .item-info .name {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2b2d42;
+        }
+        .item-info .desc {
+            font-size: 12px;
+            color: #8d99ae;
+            margin-top: 3px;
+        }
+        .item-info .price {
+            color: #e63946;
+            font-size: 16px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+        .add-btn {
+            background-color: #e63946;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 15px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .add-btn:active {
+            background-color: #d62828;
+        }
+        .remark-box {
+            margin: 20px 0;
+        }
+        .remark-box textarea {
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 12px;
+            font-size: 14px;
+            min-height: 80px;
+            resize: none;
+        }
+        .order-list {
+            background: #fff;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .order-list h4 {
+            color: #d62828;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        .order-item {
+            font-size: 14px;
+            color: #333;
+            line-height: 1.6;
+        }
+        .total-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #fff;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+        }
+        .total-bar .total-text {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2b2d42;
+        }
+        .total-bar .pay-btn {
+            background-color: #07c160;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 10px 25px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .qrcode-box {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 999;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            padding: 20px;
+        }
+        .qrcode-box img {
+            width: 220px;
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+        .close-btn {
+            background-color: #fff;
+            color: #333;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 20px;
+            font-size: 14px;
+            margin-top: 15px;
+        }
+        .pay-row {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 15px 0;
+        }
+        .pay-col {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">🔥校门口烤冷面·扫码点餐</div>
+
+    <!-- 经典套餐 -->
+    <div class="section-title">经典套餐</div>
+    <div class="menu-item">
+        <div class="item-info">
+            <div class="name">标准烤冷面</div>
+            <div class="desc">鸡蛋+烤肠+面皮+新鲜蔬菜</div>
+            <div class="price">9元</div>
+        </div>
+        <button class="add-btn" onclick="addGoods('标准烤冷面',9)">+ 点一份</button>
+    </div>
+    <div class="menu-item">
+        <div class="item-info">
+            <div class="name">大份烤冷面</div>
+            <div class="desc">鸡蛋+烤肠+双面皮+新鲜蔬菜</div>
+            <div class="price">11元</div>
+        </div>
+        <button class="add-btn" onclick="addGoods('大份烤冷面',11)">+ 点一份</button>
+    </div>
+
+    <!-- 特色风味 -->
+    <div class="section-title">特色风味</div>
+    <div class="menu-item">
+        <div class="item-info">
+            <div class="name">辣白菜烤冷面</div>
+            <div class="desc">鸡蛋+烤肠+面皮+新鲜蔬菜+辣白菜</div>
+            <div class="price">11元</div>
+        </div>
+        <button class="add-btn" onclick="addGoods('辣白菜烤冷面',11)">+ 点一份</button>
+    </div>
+    <div class="menu-item">
+        <div class="item-info">
+            <div class="name">里脊烤冷面</div>
+            <div class="desc">鸡蛋+烤肠+面皮+新鲜蔬菜+里脊</div>
+            <div class="price">12元</div>
+        </div>
+        <button class="add-btn" onclick="addGoods('里脊烤冷面',12)">+ 点一份</button>
+    </div>
+
+    <!-- 芝士爆款 -->
+    <div class="section-title">芝士爆款</div>
+    <div class="menu-item">
+        <div class="item-info">
+            <div class="name">芝士玉米烤冷面</div>
+            <div class="desc">鸡蛋+玉米+芝士+面皮+新鲜蔬菜</div>
+            <div class="price">13元</div>
+        </div>
+        <button class="add-btn" onclick="addGoods('芝士玉米烤冷面',13)">+ 点一份</button>
+    </div>
+    <div class="menu-item">
+        <div class="item-info">
+            <div class="name">芝士鸡排烤冷面</div>
+            <div class="desc">鸡蛋+芝士+鸡排+面皮+新鲜蔬菜</div>
+            <div class="price">15元</div>
+        </div>
+        <button class="add-btn" onclick="addGoods('芝士鸡排烤冷面',15)">+ 点一份</button>
+    </div>
+
+    <!-- 网红爆款 -->
+    <div class="section-title">网红爆款</div>
+    <div class="menu-item">
+        <div class="item-info">
+            <div class="name">三养火鸡面烤冷面</div>
+            <div class="desc">鸡蛋+火鸡面+烤肠+面皮+新鲜蔬菜</div>
+            <div class="price">14元</div>
+        </div>
+        <button class="add-btn" onclick="addGoods('三养火鸡面烤冷面',14)">+ 点一份</button>
+    </div>
+    <div class="menu-item">
+        <div class="item-info">
+            <div class="name">芝士三养火鸡面烤冷面</div>
+            <div class="desc">鸡蛋+火鸡面+烤肠+面皮+新鲜蔬菜+芝士</div>
+            <div class="price">18元</div>
+        </div>
+        <button class="add-btn" onclick="addGoods('芝士三养火鸡面烤冷面',18)">+ 点一份</button>
+    </div>
+
+    <!-- 火鸡面拌面系列 -->
+    <div class="section-title">火鸡面拌面系列</div>
+    <div class="menu-item">
+        <div class="item-info">
+            <div class="name">三养瀑布土豆泥拌面</div>
+            <div class="price">14元</div>
+        </div>
+        <button class="add-btn" onclick="addGoods('三养瀑布土豆泥拌面',14)">+ 点一份</button>
+    </div>
+    <div class="menu-item">
+        <div class="item-info">
+            <div class="name">三养芝士瀑布土豆泥拌面</div>
+            <div class="price">18元</div>
+        </div>
+        <button class="add-btn" onclick="addGoods('三养芝士瀑布土豆泥拌面',18)">+ 点一份</button>
+    </div>
+
+    <!-- 加料区 -->
+    <div class="section-title">加料区</div>
+    <div class="menu-item">
+        <div class="item-info">
+            <div class="name">鸡蛋</div>
+            <div class="price">2元</div>
+        </div>
+        <button class="add-btn" onclick="addGoods('加料-鸡蛋',2)">+ 加一份</button>
+    </div>
+    <div class="menu-item">
+        <div class="item-info">
+            <div class="name">面皮</div>
+            <div class="price">2元</div>
+        </div>
+        <button class="add-btn" onclick="addGoods('加料-面皮',2)">+ 加一份</button>
+    </div>
+    <div class="menu-item">
+        <div class="item-info">
+            <div class="name">烤肠</div>
+            <div class="price">2元</div>
+        </div>
+        <button class="add-btn" onclick="addGoods('加料-烤肠',2)">+ 加一份</button>
+    </div>
+    <div class="menu-item">
+        <div class="item-info">
+            <div class="name">辣白菜</div>
+            <div class="price">2元</div>
+        </div>
+        <button class="add-btn" onclick="addGoods('加料-辣白菜',2)">+ 加一份</button>
+    </div>
+    <div class="menu-item">
+        <div class="item-info">
+            <div class="name">里脊</div>
+            <div class="price">3元</div>
+        </div>
+        <button class="add-btn" onclick="addGoods('加料-里脊',3)">+ 加一份</button>
+    </div>
+    <div class="menu-item">
+        <div class="item-info">
+            <div class="name">鸡排</div>
+            <div class="price">4元</div>
+        </div>
+        <button class="add-btn" onclick="addGoods('加料-鸡排',4)">+ 加一份</button>
+    </div>
+    <div class="menu-item">
+        <div class="item-info">
+            <div class="name">芝士</div>
+            <div class="price">4元</div>
+        </div>
+        <button class="add-btn" onclick="addGoods('加料-芝士',4)">+ 加一份</button>
+    </div>
+    <div class="menu-item">
+        <div class="item-info">
+            <div class="name">火鸡面</div>
+            <div class="price">6元</div>
+        </div>
+        <button class="add-btn" onclick="addGoods('加料-火鸡面',6)">+ 加一份</button>
+    </div>
+
+    <!-- 已点订单清单 -->
+    <div class="order-list">
+        <h4>📋 已点清单</h4>
+        <div id="orderListBox" class="order-item">暂未点餐</div>
+    </div>
+
+    <div class="remark-box">
+        <textarea placeholder="备注：辣度（微辣/中辣/特辣）、忌口（不要香菜/洋葱）等"></textarea>
+    </div>
+
+    <div class="total-bar">
+        <div class="total-text">合计：<span id="totalPrice">0</span> 元</div>
+        <button class="pay-btn" onclick="showPay()">去付款</button>
+    </div>
+
+    <!-- 付款码弹窗（微信+支付宝） -->
+    <div class="qrcode-box" id="payQrcode">
+        <h3>请选择支付方式</h3>
+        <div class="pay-row">
+            <div class="pay-col">
+                <p>微信扫码</p>
+                <img src=""C:\Users\wuzou\Desktop\微信图片_20260514142136_613_26.jpg"" alt="微信收款码">
+            </div>
+            <div class="pay-col">
+                <p>支付宝扫码</p>
+                <img src=""C:\Users\wuzou\Desktop\微信图片_20260514143935_41_434.jpg"" alt="支付宝收款码">
+            </div>
+        </div>
+        <p>付款后请告知老板订单备注，凭付款凭证取餐~</p>
+        <button class="close-btn" onclick="hidePay()">返回点餐</button>
+    </div>
+
+    <script>
+        let total = 0;
+        let orderMap = {};
+
+        function addGoods(name, price){
+            total += price;
+            if(orderMap[name]){
+                orderMap[name].count += 1;
+            }else{
+                orderMap[name] = {price:price, count:1};
+            }
+            document.getElementById("totalPrice").innerText = total;
+            renderOrderList();
+        }
+
+        function renderOrderList(){
+            let html = "";
+            let keys = Object.keys(orderMap);
+            if(keys.length === 0){
+                html = "暂未点餐";
+            }else{
+                keys.forEach(k=>{
+                    html += k + " ×" + orderMap[k].count 
+                             + "  " + orderMap[k].price*orderMap[k].count + "元<br>";
+                });
+            }
+            document.getElementById("orderListBox").innerHTML = html;
+        }
+
+        function showPay(){
+            if(total <= 0){
+                alert("请先点选菜品或加料哦~");
+                return;
+            }
+            document.getElementById("payQrcode").style.display = "flex";
+        }
+        function hidePay(){
+            document.getElementById("payQrcode").style.display = "none";
+        }
+    </script>
+</body>
+</html>
