@@ -8,193 +8,143 @@
         * {margin:0;padding:0;box-sizing:border-box;font-family:"微软雅黑",sans-serif;}
         body {background:#fff8f5;padding:15px;padding-bottom:120px;}
         .header {text-align:center;color:#e63946;font-size:24px;font-weight:bold;margin:20px 0;}
-        .tip-top {background:#ffebee;color:#c62828;padding:12px;border-radius:10px;text-align:center;font-size:15px;font-weight:bold;margin-bottom:15px;line-height:1.6;}
+        .tip {background:#ffebee;color:#c62828;padding:12px;border-radius:10px;text-align:center;font-size:15px;font-weight:bold;margin-bottom:15px;line-height:1.6;}
         .section-title {color:#d62828;font-size:18px;margin:15px 0 8px;}
-        .menu-item {background:#fff;border-radius:12px;padding:12px;display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;box-shadow:0 2px 5px #0001;}
+        .menu-item {background:#fff;border-radius:12px;padding:12px;display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;box-shadow:0 2px 5px rgba(0,0,0,0.05);}
         .item-info .name {font-size:16px;font-weight:bold;}
         .item-info .price {color:#e63946;margin-top:5px;}
         .count-control {display:flex;align-items:center;gap:10px;}
         .count-btn {width:32px;height:32px;background:#e63946;color:#fff;border:none;border-radius:6px;font-size:18px;cursor:pointer;}
         .count-text {font-size:16px;min-width:24px;text-align:center;}
-        .total-bar {position:fixed;bottom:0;left:0;width:100%;background:#fff;padding:15px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 -2px 10px #0001;}
+        textarea {width:100%;height:80px;padding:10px;border-radius:8px;border:1px solid #ddd;resize:none;margin-top:10px;}
+        .total-bar {position:fixed;bottom:0;left:0;width:100%;background:#fff;padding:15px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 -2px 10px rgba(0,0,0,0.1);}
         .total-text {font-size:18px;font-weight:bold;}
         .submit-btn {background:#07c160;color:#fff;border:none;border-radius:10px;padding:10px 20px;font-size:16px;cursor:pointer;}
 
         /* 支付弹窗 */
         .pay-modal {display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.95);z-index:999;flex-direction:column;align-items:center;justify-content:center;color:#fff;padding:20px;}
-        .pay-modal .notice {color:#ffeb3b;font-size:17px;font-weight:bold;margin-bottom:15px;text-align:center;line-height:1.8;}
-        .pay-box {display:flex;gap:25px;margin:20px 0;flex-wrap:wrap;justify-content:center;}
+        .pay-modal .title {color:#ffeb3b;font-size:18px;font-weight:bold;margin-bottom:20px;text-align:center;line-height:1.6;}
+        .pay-box {display:flex;gap:30px;justify-content:center;align-items:center;}
         .pay-col {text-align:center;}
-        .pay-col img {width:180px;height:180px;background:#fff;padding:10px;border-radius:10px;margin:10px 0;cursor:pointer;}
-        .close-btn {background:#fff;color:#333;border:none;padding:10px 25px;border-radius:8px;margin-top:20px;font-size:16px;cursor:pointer;}
+        .pay-col img {width:180px;height:180px;background:#fff;padding:10px;border-radius:10px;cursor:pointer;}
+        .close-btn {background:#fff;color:#333;border:none;padding:10px 25px;border-radius:8px;margin-top:25px;font-size:16px;cursor:pointer;}
 
-        /* 全屏放大层 */
-        .preview-layer {display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:1000;align-items:center;justify-content:center;padding:15px;}
-        .preview-layer img {max-width:100%;max-height:80%;border-radius:8px;}
-        .preview-tip {color:#ffeb3b;margin-top:25px;font-size:16px;font-weight:bold;text-align:center;}
-        textarea {width:100%;height:80px;padding:10px;border-radius:8px;border:1px solid #ddd;resize:none;margin-top:10px;}
+        /* 全屏放大层（核心功能）*/
+        .preview {display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:#000;z-index:1000;align-items:center;justify-content:center;}
+        .preview img {max-width:95%;max-height:90%;object-fit:contain;}
+        .preview-tip {position:absolute;bottom:50px;left:0;right:0;text-align:center;color:#ffeb3b;font-size:16px;font-weight:bold;line-height:1.6;}
     </style>
 </head>
 <body>
 
 <div class="header">🔥芝士火鸡烤冷面</div>
-
-<div class="tip-top">
-    选好商品提交订单<br>点击二维码放大 → 再长按识别付款
-</div>
+<div class="tip">提交订单 → 点击二维码放大 → 长按识别付款</div>
 
 <div class="section-title">经典烤冷面</div>
 <div class="menu-item">
     <div class="item-info"><div class="name">标准烤冷面</div><div class="price">9元</div></div>
-    <div class="count-control">
-        <button class="count-btn" onclick="c('标准烤冷面',9,-1)">-</button>
-        <span class="count-text" id="a1">0</span>
-        <button class="count-btn" onclick="c('标准烤冷面',9,1)">+</button>
-    </div>
+    <div class="count-control"><button class="count-btn" onclick="c('标准烤冷面',9,-1)">-</button><span id="a1">0</span><button class="count-btn" onclick="c('标准烤冷面',9,1)">+</button></div>
 </div>
 <div class="menu-item">
     <div class="item-info"><div class="name">大份烤冷面</div><div class="price">11元</div></div>
-    <div class="count-control">
-        <button class="count-btn" onclick="c('大份烤冷面',11,-1)">-</button>
-        <span class="count-text" id="a2">0</span>
-        <button class="count-btn" onclick="c('大份烤冷面',11,1)">+</button>
-    </div>
+    <div class="count-control"><button class="count-btn" onclick="c('大份烤冷面',11,-1)">-</button><span id="a2">0</span><button class="count-btn" onclick="c('大份烤冷面',11,1)">+</button></div>
 </div>
 
 <div class="section-title">特色风味</div>
 <div class="menu-item">
     <div class="item-info"><div class="name">辣白菜烤冷面</div><div class="price">11元</div></div>
-    <div class="count-control">
-        <button class="count-btn" onclick="c('辣白菜烤冷面',11,-1)">-</button>
-        <span class="count-text" id="a3">0</span>
-        <button class="count-btn" onclick="c('辣白菜烤冷面',11,1)">+</button>
-    </div>
+    <div class="count-control"><button class="count-btn" onclick="c('辣白菜烤冷面',11,-1)">-</button><span id="a3">0</span><button class="count-btn" onclick="c('辣白菜烤冷面',11,1)">+</button></div>
 </div>
 <div class="menu-item">
     <div class="item-info"><div class="name">里脊烤冷面</div><div class="price">12元</div></div>
-    <div class="count-control">
-        <button class="count-btn" onclick="c('里脊烤冷面',12,-1)">-</button>
-        <span class="count-text" id="a4">0</span>
-        <button class="count-btn" onclick="c('里脊烤冷面',12,1)">+</button>
-    </div>
+    <div class="count-control"><button class="count-btn" onclick="c('里脊烤冷面',12,-1)">-</button><span id="a4">0</span><button class="count-btn" onclick="c('里脊烤冷面',12,1)">+</button></div>
 </div>
 
 <div class="section-title">芝士爆款</div>
 <div class="menu-item">
     <div class="item-info"><div class="name">芝士玉米烤冷面</div><div class="price">13元</div></div>
-    <div class="count-control">
-        <button class="count-btn" onclick="c('芝士玉米烤冷面',13,-1)">-</button>
-        <span class="count-text" id="a5">0</span>
-        <button class="count-btn" onclick="c('芝士玉米烤冷面',13,1)">+</button>
-    </div>
+    <div class="count-control"><button class="count-btn" onclick="c('芝士玉米烤冷面',13,-1)">-</button><span id="a5">0</span><button class="count-btn" onclick="c('芝士玉米烤冷面',13,1)">+</button></div>
 </div>
 <div class="menu-item">
     <div class="item-info"><div class="name">芝士鸡排烤冷面</div><div class="price">15元</div></div>
-    <div class="count-control">
-        <button class="count-btn" onclick="c('芝士鸡排烤冷面',15,-1)">-</button>
-        <span class="count-text" id="a6">0</span>
-        <button class="count-btn" onclick="c('芝士鸡排烤冷面',15,1)">+</button>
-    </div>
+    <div class="count-control"><button class="count-btn" onclick="c('芝士鸡排烤冷面',15,-1)">-</button><span id="a6">0</span><button class="count-btn" onclick="c('芝士鸡排烤冷面',15,1)">+</button></div>
 </div>
 
 <div class="section-title">网红爆款</div>
 <div class="menu-item">
     <div class="item-info"><div class="name">三养火鸡面烤冷面</div><div class="price">14元</div></div>
-    <div class="count-control">
-        <button class="count-btn" onclick="c('三养火鸡面烤冷面',14,-1)">-</button>
-        <span class="count-text" id="a7">0</span>
-        <button class="count-btn" onclick="c('三养火鸡面烤冷面',14,1)">+</button>
-    </div>
+    <div class="count-control"><button class="count-btn" onclick="c('三养火鸡面烤冷面',14,-1)">-</button><span id="a7">0</span><button class="count-btn" onclick="c('三养火鸡面烤冷面',14,1)">+</button></div>
 </div>
 <div class="menu-item">
     <div class="item-info"><div class="name">芝士三养火鸡面烤冷面</div><div class="price">18元</div></div>
-    <div class="count-control">
-        <button class="count-btn" onclick="c('芝士三养火鸡面烤冷面',18,-1)">-</button>
-        <span class="count-text" id="a8">0</span>
-        <button class="count-btn" onclick="c('芝士三养火鸡面烤冷面',18,1)">+</button>
-    </div>
+    <div class="count-control"><button class="count-btn" onclick="c('芝士三养火鸡面烤冷面',18,-1)">-</button><span id="a8">0</span><button class="count-btn" onclick="c('芝士三养火鸡面烤冷面',18,1)">+</button></div>
 </div>
 
-<textarea placeholder="备注：辣度、忌口、少放调料等"></textarea>
+<textarea placeholder="备注：辣度、忌口、少放香菜等"></textarea>
 
 <div class="total-bar">
     <div class="total-text">合计：<span id="total">0</span> 元</div>
     <button class="submit-btn" onclick="submitOrder()">提交订单</button>
 </div>
 
-<!-- 支付弹窗 带大字操作提示 -->
+<!-- 支付弹窗 -->
 <div class="pay-modal" id="payModal">
-    <div class="notice">⚠️ 必须先点图片放大<br>再长按识别二维码付款</div>
+    <div class="title">⚠️ 请先点击二维码放大<br>再长按识别付款</div>
     <div class="pay-box">
         <div class="pay-col">
             <p>微信支付</p>
-            <img src="wechat.jpg" onclick="openPreview(this.src)">
+            <img src="wechat.jpg" onclick="zoom(this.src)">
         </div>
         <div class="pay-col">
             <p>支付宝支付</p>
-            <img src="alipay.jpg" onclick="openPreview(this.src)">
+            <img src="alipay.jpg" onclick="zoom(this.src)">
         </div>
     </div>
     <button class="close-btn" onclick="closePay()">已支付 关闭</button>
 </div>
 
-<!-- 全屏放大层 适配微信支付宝 -->
-<div class="preview-layer" id="previewLayer" onclick="closePreview()">
-    <img id="previewImg" src="">
-    <div class="preview-tip">长按图片 → 识别二维码付款<br>点击空白处关闭</div>
+<!-- 全屏放大层 -->
+<div class="preview" id="preview" onclick="closeZoom()">
+    <img id="previewImg">
+    <div class="preview-tip">长按图片 → 识别二维码付款<br>点击任意处关闭</div>
 </div>
 
 <script>
 let cart = {};
-let total = 0;
-const idMap = {
-    "标准烤冷面":"a1",
-    "大份烤冷面":"a2",
-    "辣白菜烤冷面":"a3",
-    "里脊烤冷面":"a4",
-    "芝士玉米烤冷面":"a5",
-    "芝士鸡排烤冷面":"a6",
-    "三养火鸡面烤冷面":"a7",
-    "芝士三养火鸡面烤冷面":"a8"
-};
+const idMap = {"标准烤冷面":"a1","大份烤冷面":"a2","辣白菜烤冷面":"a3","里脊烤冷面":"a4","芝士玉米烤冷面":"a5","芝士鸡排烤冷面":"a6","三养火鸡面烤冷面":"a7","芝士三养火鸡面烤冷面":"a8"};
 
-function c(name,price,delta){
-    if(!cart[name]) cart[name] = {cnt:0, p:price};
-    cart[name].cnt += delta;
-    if(cart[name].cnt < 0) cart[name].cnt = 0;
-    document.getElementById(idMap[name]).innerText = cart[name].cnt;
-    calcTotal();
+function c(name, price, num) {
+    if (!cart[name]) cart[name] = { n: 0, p: price };
+    cart[name].n += num;
+    if (cart[name].n < 0) cart[name].n = 0;
+    document.getElementById(idMap[name]).innerText = cart[name].n;
+    calc();
 }
 
-function calcTotal(){
-    total = 0;
-    for(let k in cart){
-        total += cart[k].cnt * cart[k].p;
-    }
+function calc() {
+    let total = 0;
+    for (let k in cart) total += cart[k].n * cart[k].p;
     document.getElementById("total").innerText = total;
 }
 
-function submitOrder(){
-    if(total <= 0){
-        alert("请先选择商品");
-        return;
-    }
+function submitOrder() {
+    let total = parseInt(document.getElementById("total").innerText);
+    if (total <= 0) { alert("请先选择商品"); return; }
     document.getElementById("payModal").style.display = "flex";
 }
 
-function closePay(){
+function closePay() {
     document.getElementById("payModal").style.display = "none";
 }
 
-function openPreview(src){
+function zoom(src) {
     document.getElementById("previewImg").src = src;
-    document.getElementById("previewLayer").style.display = "flex";
+    document.getElementById("preview").style.display = "flex";
 }
 
-function closePreview(){
-    document.getElementById("previewLayer").style.display = "none";
+function closeZoom() {
+    document.getElementById("preview").style.display = "none";
 }
 </script>
-
 </body>
 </html>
