@@ -3,18 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>芝士火鸡烤冷面·扫码点餐</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <style>
-        * {margin:0;padding:0;box-sizing:border-box;font-family:"微软雅黑",sans-serif;}
+        * {margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft YaHei",sans-serif;}
         body {background:#fff8f5;padding:15px;padding-bottom:180px;}
-        .header {text-align:center;color:#e63946;font-size:24px;font-weight:bold;margin-bottom:15px;}
-        .tip {background:#ffebee;color:#c62828;padding:12px;border-radius:10px;text-align:center;font-size:16px;font-weight:bold;margin-bottom:15px;}
-        .pay-qr-wrap {display:flex;justify-content:center;gap:20px;margin:20px 0;}
-        .pay-qr {text-align:center;}
-        .pay-qr img {width:160px;height:160px;border-radius:10px;box-shadow:0 2px 8px #0002;}
-        .pay-qr p {font-size:14px;color:#666;margin-top:8px;}
+        .header {text-align:center;color:#e63946;font-size:24px;font-weight:bold;margin-bottom:20px;}
         .section-title {color:#d62828;font-size:18px;font-weight:bold;margin:20px 0 10px;}
-        .menu-item {background:#fff;border-radius:12px;padding:12px 15px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 5px #0001;}
+        .menu-item {background:#fff;border-radius:12px;padding:12px 15px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 5px rgba(0,0,0,0.05);}
         .item-info .name {font-size:16px;font-weight:600;color:#2b2d42;}
         .item-info .desc {font-size:12px;color:#8d99ae;margin-top:3px;}
         .item-info .price {color:#e63946;font-size:16px;font-weight:bold;margin-top:5px;}
@@ -23,209 +18,197 @@
         .count-text {font-size:16px;min-width:24px;text-align:center;}
         .remark-box {margin:20px 0;}
         .remark-box textarea {width:100%;border:1px solid #ddd;border-radius:10px;padding:12px;font-size:14px;min-height:80px;resize:none;}
-        .total-bar {position:fixed;bottom:0;left:0;width:100%;background:#fff;padding:15px 20px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 -2px 10px #0001;}
+        .order-list {background:#fff;border-radius:10px;padding:15px;margin:15px 0;box-shadow:0 2px 5px rgba(0,0,0,0.05);}
+        .total-bar {position:fixed;bottom:0;left:0;width:100%;background:#fff;padding:15px 20px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 -2px 10px rgba(0,0,0,0.1);}
         .total-text {font-size:18px;font-weight:bold;color:#2b2d42;}
-        .submit-btn {background:#07c160;color:#fff;border:none;border-radius:10px;padding:10px 20px;font-size:16px;font-weight:bold;cursor:pointer;}
+        .pay-btn {background:#07c160;color:#fff;border:none;border-radius:10px;padding:10px 20px;font-size:16px;font-weight:bold;cursor:pointer;}
+        
+        /* 支付弹窗 */
+        .pay-modal {
+            display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+            background:rgba(0,0,0,0.85); z-index:999;
+            flex-direction:column; align-items:center; justify-content:center; color:#fff; padding:20px;
+        }
+        .pay-modal img {
+            width:200px; height:200px; background:#fff; padding:10px; border-radius:10px;
+        }
+        .pay-box {
+            display:flex; gap:20px; margin:20px 0;
+        }
+        .close-btn {
+            background:#fff; color:#333; border:none; padding:10px 25px; border-radius:8px; margin-top:20px;
+            font-size:16px; cursor:pointer;
+        }
     </style>
 </head>
 <body>
-    <div class="header">🔥芝士火鸡烤冷面·扫码点餐</div>
 
-    <!-- 强防逃单提示 -->
-    <div class="tip">
-        ⚠️ 第一步：长按对应二维码（微信/支付宝）→ 识别并付款<br>
-        ⚠️ 第二步：付款成功后，再提交订单<br>
-        未付款提交订单一律不予出餐
+<div class="header">🔥芝士火鸡烤冷面·扫码点餐</div>
+
+<div class="section-title">经典套餐</div>
+<div class="menu-item">
+    <div class="item-info">
+        <div class="name">标准烤冷面</div><div class="desc">鸡蛋+烤肠+面皮+新鲜蔬菜</div>
+        <div class="price">9元</div>
     </div>
-
-    <!-- 双收款码：微信+支付宝，长按各自跳转 -->
-    <div class="pay-qr-wrap">
-        <div class="pay-qr">
-            <p>微信长按付款</p>
-            <img src="https://your-wechat-pay-qr.jpg" alt="微信收款码">
-        </div>
-        <div class="pay-qr">
-            <p>支付宝长按付款</p>
-            <img src="https://your-alipay-pay-qr.jpg" alt="支付宝收款码">
-        </div>
+    <div class="count-control">
+        <button class="count-btn" onclick="change('标准烤冷面',9,-1)">-</button>
+        <span id="c1">0</span>
+        <button class="count-btn" onclick="change('标准烤冷面',9,1)">+</button>
     </div>
+</div>
 
-    <div class="section-title">经典套餐</div>
-    <div class="menu-item">
-        <div class="item-info">
-            <div class="name">标准烤冷面</div>
-            <div class="desc">鸡蛋+烤肠+面皮+新鲜蔬菜</div>
-            <div class="price">9元</div>
-        </div>
-        <div class="count-control">
-            <button class="count-btn" onclick="changeCount('标准烤冷面',9,-1)">-</button>
-            <span class="count-text" id="c1">0</span>
-            <button class="count-btn" onclick="changeCount('标准烤冷面',9,1)">+</button>
-        </div>
+<div class="menu-item">
+    <div class="item-info">
+        <div class="name">大份烤冷面</div><div class="desc">鸡蛋+烤肠+双面皮+新鲜蔬菜</div>
+        <div class="price">11元</div>
     </div>
-
-    <div class="menu-item">
-        <div class="item-info">
-            <div class="name">大份烤冷面</div>
-            <div class="desc">鸡蛋+烤肠+双面皮+新鲜蔬菜</div>
-            <div class="price">11元</div>
-        </div>
-        <div class="count-control">
-            <button class="count-btn" onclick="changeCount('大份烤冷面',11,-1)">-</button>
-            <span class="count-text" id="c2">0</span>
-            <button class="count-btn" onclick="changeCount('大份烤冷面',11,1)">+</button>
-        </div>
+    <div class="count-control">
+        <button class="count-btn" onclick="change('大份烤冷面',11,-1)">-</button>
+        <span id="c2">0</span>
+        <button class="count-btn" onclick="change('大份烤冷面',11,1)">+</button>
     </div>
+</div>
 
-    <div class="section-title">特色风味</div>
-    <div class="menu-item">
-        <div class="item-info">
-            <div class="name">辣白菜烤冷面</div>
-            <div class="desc">鸡蛋+烤肠+面皮+新鲜蔬菜+辣白菜</div>
-            <div class="price">11元</div>
-        </div>
-        <div class="count-control">
-            <button class="count-btn" onclick="changeCount('辣白菜烤冷面',11,-1)">-</button>
-            <span class="count-text" id="c3">0</span>
-            <button class="count-btn" onclick="changeCount('辣白菜烤冷面',11,1)">+</button>
-        </div>
+<div class="section-title">特色风味</div>
+<div class="menu-item">
+    <div class="item-info">
+        <div class="name">辣白菜烤冷面</div><div class="desc">鸡蛋+烤肠+面皮+新鲜蔬菜+辣白菜</div>
+        <div class="price">11元</div>
     </div>
-
-    <div class="menu-item">
-        <div class="item-info">
-            <div class="name">里脊烤冷面</div>
-            <div class="desc">鸡蛋+烤肠+面皮+新鲜蔬菜+里脊</div>
-            <div class="price">12元</div>
-        </div>
-        <div class="count-control">
-            <button class="count-btn" onclick="changeCount('里脊烤冷面',12,-1)">-</button>
-            <span class="count-text" id="c4">0</span>
-            <button class="count-btn" onclick="changeCount('里脊烤冷面',12,1)">+</button>
-        </div>
+    <div class="count-control">
+        <button class="count-btn" onclick="change('辣白菜烤冷面',11,-1)">-</button>
+        <span id="c3">0</span>
+        <button class="count-btn" onclick="change('辣白菜烤冷面',11,1)">+</button>
     </div>
+</div>
 
-    <div class="section-title">芝士爆款</div>
-    <div class="menu-item">
-        <div class="item-info">
-            <div class="name">芝士玉米烤冷面</div>
-            <div class="desc">鸡蛋+玉米+芝士+面皮+新鲜蔬菜</div>
-            <div class="price">13元</div>
-        </div>
-        <div class="count-control">
-            <button class="count-btn" onclick="changeCount('芝士玉米烤冷面',13,-1)">-</button>
-            <span class="count-text" id="c5">0</span>
-            <button class="count-btn" onclick="changeCount('芝士玉米烤冷面',13,1)">+</button>
-        </div>
+<div class="menu-item">
+    <div class="item-info">
+        <div class="name">里脊烤冷面</div><div class="desc">鸡蛋+烤肠+面皮+新鲜蔬菜+里脊</div>
+        <div class="price">12元</div>
     </div>
-
-    <div class="menu-item">
-        <div class="item-info">
-            <div class="name">芝士鸡排烤冷面</div>
-            <div class="desc">鸡蛋+芝士+鸡排+面皮+新鲜蔬菜</div>
-            <div class="price">15元</div>
-        </div>
-        <div class="count-control">
-            <button class="count-btn" onclick="changeCount('芝士鸡排烤冷面',15,-1)">-</button>
-            <span class="count-text" id="c6">0</span>
-            <button class="count-btn" onclick="changeCount('芝士鸡排烤冷面',15,1)">+</button>
-        </div>
+    <div class="count-control">
+        <button class="count-btn" onclick="change('里脊烤冷面',12,-1)">-</button>
+        <span id="c4">0</span>
+        <button class="count-btn" onclick="change('里脊烤冷面',12,1)">+</button>
     </div>
+</div>
 
-    <div class="section-title">网红爆款</div>
-    <div class="menu-item">
-        <div class="item-info">
-            <div class="name">三养火鸡面烤冷面</div>
-            <div class="desc">鸡蛋+火鸡面+烤肠+面皮+新鲜蔬菜</div>
-            <div class="price">14元</div>
-        </div>
-        <div class="count-control">
-            <button class="count-btn" onclick="changeCount('三养火鸡面烤冷面',14,-1)">-</button>
-            <span class="count-text" id="c7">0</span>
-            <button class="count-btn" onclick="changeCount('三养火鸡面烤冷面',14,1)">+</button>
-        </div>
+<div class="section-title">芝士爆款</div>
+<div class="menu-item">
+    <div class="item-info">
+        <div class="name">芝士玉米烤冷面</div><div class="desc">鸡蛋+玉米+芝士+面皮+新鲜蔬菜</div>
+        <div class="price">13元</div>
     </div>
+    <div class="count-control">
+        <button class="count-btn" onclick="change('芝士玉米烤冷面',13,-1)">-</button>
+        <span id="c5">0</span>
+        <button class="count-btn" onclick="change('芝士玉米烤冷面',13,1)">+</button>
+    </div>
+</div>
 
-    <div class="menu-item">
-        <div class="item-info">
-            <div class="name">芝士三养火鸡面烤冷面</div>
-            <div class="desc">鸡蛋+火鸡面+烤肠+面皮+新鲜蔬菜+芝士</div>
-            <div class="price">18元</div>
+<div class="menu-item">
+    <div class="item-info">
+        <div class="name">芝士鸡排烤冷面</div><div class="desc">鸡蛋+芝士+鸡排+面皮+新鲜蔬菜</div>
+        <div class="price">15元</div>
+    </div>
+    <div class="count-control">
+        <button class="count-btn" onclick="change('芝士鸡排烤冷面',15,-1)">-</button>
+        <span id="c6">0</span>
+        <button class="count-btn" onclick="change('芝士鸡排烤冷面',15,1)">+</button>
+    </div>
+</div>
+
+<div class="section-title">网红爆款</div>
+<div class="menu-item">
+    <div class="item-info">
+        <div class="name">三养火鸡面烤冷面</div><div class="desc">鸡蛋+火鸡面+烤肠+面皮+新鲜蔬菜</div>
+        <div class="price">14元</div>
+    </div>
+    <div class="count-control">
+        <button class="count-btn" onclick="change('三养火鸡面烤冷面',14,-1)">-</button>
+        <span id="c7">0</span>
+        <button class="count-btn" onclick="change('三养火鸡面烤冷面',14,1)">+</button>
+    </div>
+</div>
+
+<div class="menu-item">
+    <div class="item-info">
+        <div class="name">芝士三养火鸡面烤冷面</div><div class="desc">鸡蛋+火鸡面+烤肠+面皮+新鲜蔬菜+芝士</div>
+        <div class="price">18元</div>
+    </div>
+    <div class="count-control">
+        <button class="count-btn" onclick="change('芝士三养火鸡面烤冷面',18,-1)">-</button>
+        <span id="c8">0</span>
+        <button class="count-btn" onclick="change('芝士三养火鸡面烤冷面',18,1)">+</button>
+    </div>
+</div>
+
+<div class="remark-box">
+    <textarea id="remark" placeholder="备注：辣度、不要香菜、忌口等"></textarea>
+</div>
+
+<div class="total-bar">
+    <div class="total-text">合计：<span id="total">0</span> 元</div>
+    <button class="pay-btn" onclick="submitOrder()">提交订单并付款</button>
+</div>
+
+<!-- 支付弹窗（提交后弹出） -->
+<div class="pay-modal" id="payModal">
+    <h3>请扫码支付</h3>
+    <div class="pay-box">
+        <div style="text-align:center">
+            <p>微信收款</p>
+            <img src="wechat.jpg">
         </div>
-        <div class="count-control">
-            <button class="count-btn" onclick="changeCount('芝士三养火鸡面烤冷面',18,-1)">-</button>
-            <span class="count-text" id="c8">0</span>
-            <button class="count-btn" onclick="changeCount('芝士三养火鸡面烤冷面',18,1)">+</button>
+        <div style="text-align:center">
+            <p>支付宝收款</p>
+            <img src="alipay.jpg">
         </div>
     </div>
+    <p>支付完成后等待出餐</p>
+    <button class="close-btn" onclick="closePay()">完成支付</button>
+</div>
 
-    <div class="remark-box">
-        <textarea placeholder="备注（如：不要辣、多加醋等）" id="remark"></textarea>
-    </div>
+<script>
+let cart = {};
+let total = 0;
 
-    <div class="order-list" id="orderList" style="display:none;">
-        <h4>已选商品</h4>
-        <div id="orderItems"></div>
-    </div>
+const map = {
+    "标准烤冷面":"c1",
+    "大份烤冷面":"c2",
+    "辣白菜烤冷面":"c3",
+    "里脊烤冷面":"c4",
+    "芝士玉米烤冷面":"c5",
+    "芝士鸡排烤冷面":"c6",
+    "三养火鸡面烤冷面":"c7",
+    "芝士三养火鸡面烤冷面":"c8"
+};
 
-    <div class="total-bar">
-        <div class="total-text">总计：¥<span id="totalPrice">0</span></div>
-        <button class="submit-btn" onclick="submitOrder()">提交订单</button>
-    </div>
+function change(name,price,n){
+    if(!cart[name])cart[name]={c:0,p:price};
+    cart[name].c += n;
+    if(cart[name].c<0)cart[name].c=0;
+    document.getElementById(map[name]).innerText=cart[name].c;
+    calc();
+}
 
-    <script>
-        let cart = [];
-        let total = 0;
+function calc(){
+    total=0;
+    for(let i in cart)total+=cart[i].c*cart[i].p;
+    document.getElementById("total").innerText=total;
+}
 
-        function changeCount(name, price, delta) {
-            let item = cart.find(i => i.name === name);
-            if (!item) {
-                item = {name, price, count: 0};
-                cart.push(item);
-            }
-            item.count += delta;
-            if (item.count < 0) item.count = 0;
-            updateUI();
-        }
+function submitOrder(){
+    if(total<=0){alert("请先选餐");return;}
+    document.getElementById("payModal").style.display="flex";
+}
 
-        function updateUI() {
-            total = 0;
-            let html = '';
-            cart.forEach(item => {
-                total += item.price * item.count;
-                html += `<div class="order-item">${item.name} x${item.count} = ¥${item.price * item.count}</div>`;
-            });
-            document.getElementById('totalPrice').textContent = total;
-            document.getElementById('orderItems').innerHTML = html;
-            document.getElementById('orderList').style.display = cart.length > 0 ? 'block' : 'none';
+function closePay(){
+    document.getElementById("payModal").style.display="none";
+}
+</script>
 
-            // 更新数量显示
-            document.getElementById('c1').textContent = cart.find(i => i.name === '标准烤冷面')?.count || 0;
-            document.getElementById('c2').textContent = cart.find(i => i.name === '大份烤冷面')?.count || 0;
-            document.getElementById('c3').textContent = cart.find(i => i.name === '辣白菜烤冷面')?.count || 0;
-            document.getElementById('c4').textContent = cart.find(i => i.name === '里脊烤冷面')?.count || 0;
-            document.getElementById('c5').textContent = cart.find(i => i.name === '芝士玉米烤冷面')?.count || 0;
-            document.getElementById('c6').textContent = cart.find(i => i.name === '芝士鸡排烤冷面')?.count || 0;
-            document.getElementById('c7').textContent = cart.find(i => i.name === '三养火鸡面烤冷面')?.count || 0;
-            document.getElementById('c8').textContent = cart.find(i => i.name === '芝士三养火鸡面烤冷面')?.count || 0;
-        }
-
-        function submitOrder() {
-            if (total === 0) {
-                alert('请先选择商品！');
-                return;
-            }
-            const remark = document.getElementById('remark').value;
-            let orderStr = '订单详情：\n';
-            cart.forEach(item => {
-                if (item.count > 0) {
-                    orderStr += `${item.name} x${item.count} = ¥${item.price * item.count}\n`;
-                }
-            });
-            orderStr += `备注：${remark || '无'}\n总计：¥${total}`;
-            alert('订单提交成功！\n' + orderStr);
-            // 这里可以加：提交后清空购物车
-            // cart = []; updateUI();
-        }
-    </script>
 </body>
 </html>
