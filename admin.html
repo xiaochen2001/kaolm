@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>商家订单后台</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box;font-family:"Microsoft YaHei",sans-serif;}
+        body{background:#f5f5f5;padding:15px;}
+        .login-box{max-width:400px;margin:80px auto;background:#fff;padding:30px;border-radius:12px;box-shadow:0 2px 10px rgba(0,0,0,0.1);}
+        .login-box h2{text-align:center;margin-bottom:20px;color:#d62828;}
+        .login-box input{width:100%;padding:12px;border:1px solid #ddd;border-radius:8px;margin-bottom:15px;font-size:16px;}
+        .login-box button{width:100%;padding:12px;background:#e63946;color:#fff;border:none;border-radius:8px;font-size:16px;cursor:pointer;}
+        .admin-wrap{display:none;}
+        .title{font-size:22px;font-weight:bold;color:#d62828;text-align:center;margin-bottom:20px;}
+        .order-item{background:#fff;border-radius:10px;padding:15px;margin-bottom:15px;box-shadow:0 2px 5px rgba(0,0,0,0.05);}
+        .order-id{font-size:14px;color:#999;}
+        .order-time{font-size:14px;margin:5px 0;}
+        .order-goods{margin:10px 0;line-height:1.8;white-space:pre-line;}
+        .order-total{font-size:16px;color:#e63946;font-weight:bold;margin:5px 0;}
+        .btn-group{margin-top:10px;display:flex;gap:10px;}
+        .btn{padding:8px 14px;border:none;border-radius:6px;cursor:pointer;font-size:14px;}
+        .btn-done{background:#07c160;color:#fff;}
+        .btn-del{background:#ccc;color:#333;}
+    </style>
+</head>
+<body>
+    <div class="login-box" id="loginBox">
+        <h2>商家后台登录</h2>
+        <input type="password" id="pwd" placeholder="请输入后台密码">
+        <button onclick="checkPwd()">登录后台</button>
+    </div>
+
+    <div class="admin-wrap" id="adminBox">
+        <div class="title">📋 实时订单列表</div>
+        <div id="orderList"></div>
+    </div>
+
+<script>
+const ADMIN_PWD = "123456";
+
+function checkPwd(){
+    let val = document.getElementById("pwd").value.trim();
+    if(val === ADMIN_PWD){
+        document.getElementById("loginBox").style.display = "none";
+        document.getElementById("adminBox").style.display = "block";
+        loadOrders();
+        setInterval(loadOrders, 3000);
+    }else{
+        alert("密码错误");
+    }
+}
+
+function loadOrders(){
+    let list = JSON.parse(localStorage.getItem("shopOrders") || "[]");
+    let html = "";
+    if(list.length === 0){
+        html = "<div style='text-align:center;padding:40px;color:#666'>暂无订单</div>";
+    }else{
+        list.forEach((it,i)=>{
+            html+=`
+            <div class="order-item">
+                <div class="order-id">订单：${it.id}</div>
+                <div class="order-time">${it.time}</div>
+                <div class="order-goods">${it.goods}</div>
+                <div class="order-total">合计：${it.total} 元</div>
+                <div>备注：${it.remark}</div>
+                <div class="btn-group">
+                    <button class="btn btn-done" onclick="done(${i})">标记已出餐</button>
+                    <button class="btn btn-del" onclick="del(${i})">删除订单</button>
+                </div>
+            </div>
+            `;
+        });
+    }
+    document.getElementById("orderList").innerHTML = html;
+}
+
+function done(i){
+    let arr = JSON.parse(localStorage.getItem("shopOrders")||"[]");
+    arr[i].status = "已出餐";
+    localStorage.setItem("shopOrders",JSON.stringify(arr));
+    loadOrders();
+}
+
+function del(i){
+    if(!confirm("确定删除？")) return;
+    let arr = JSON.parse(localStorage.getItem("shopOrders")||"[]");
+    arr.splice(i,1);
+    localStorage.setItem("shopOrders",JSON.stringify(arr));
+    loadOrders();
+}
+</script>
+</body>
+</html>
